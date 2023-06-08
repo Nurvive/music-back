@@ -11,11 +11,11 @@ export class Track {
   @Prop()
   artist: string;
   @Prop()
-  img: string;
-  @Prop()
   listenCount: number;
   @Prop()
   audio: string;
+  @Prop()
+  picture: string;
   @Prop()
   genres: Genre[];
 }

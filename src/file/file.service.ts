@@ -5,6 +5,7 @@ import * as fs from 'fs';
 
 export enum FileType {
   AUDIO = 'audio',
+  PICTURE = 'picture',
 }
 
 @Injectable()

@@ -1,15 +1,19 @@
 import { Module } from '@nestjs/common';
 import { TrackModule } from './track/track.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AlbumController } from './album/album.controller';
-import { AlbumService } from './album/album.service';
-import { AlbumModule } from './album/album.module';
+import { PlaylistController } from './playlist/playlist.controller';
+import { PlaylistModule } from './playlist/playlist.module';
 import { FileModule } from './file/file.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { resolve } from 'path';
+import { UsersModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { AuthController } from './auth/auth.controller';
+import { TrackController } from './track/track.controller';
 
 @Module({
   imports: [
+    AuthModule,
     ServeStaticModule.forRoot({
       rootPath: resolve(__dirname, 'static'),
     }),
@@ -17,10 +21,10 @@ import { resolve } from 'path';
       'mongodb+srv://Nurvive:80afenon@cluster0.smakqvv.mongodb.net/?retryWrites=true&w=majority',
     ),
     TrackModule,
-    AlbumModule,
+    PlaylistModule,
     FileModule,
+    UsersModule,
   ],
-  controllers: [AlbumController],
-  providers: [AlbumService],
+  controllers: [PlaylistController, AuthController, TrackController],
 })
 export class AppModule {}

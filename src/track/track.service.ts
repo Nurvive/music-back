@@ -19,16 +19,19 @@ export class TrackService {
   async create(
     dto: CreateTrackDto,
     audio: Express.Multer.File,
+    picture: Express.Multer.File
   ): Promise<Track> {
     const audioPath = this.fileService.createFile(FileType.AUDIO, audio);
+    const picturePath = this.fileService.createFile(FileType.PICTURE, picture);
     return await this.trackModel.create({
       ...dto,
       listenCount: 0,
       audio: audioPath,
+      picture: picturePath
     });
   }
 
-  async getAll(limit = 2, offset = 0): Promise<Track[]> {
+  async getAll(limit = 10, offset = 0): Promise<Track[]> {
     return this.trackModel.find().skip(offset).limit(limit);
   }
 
