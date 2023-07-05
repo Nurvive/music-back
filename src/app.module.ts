@@ -10,16 +10,27 @@ import { UsersModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthController } from './auth/auth.controller';
 import { TrackController } from './track/track.controller';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     AuthModule,
+    ConfigModule.forRoot({ isGlobal: true }),
     ServeStaticModule.forRoot({
       rootPath: resolve(__dirname, 'static'),
     }),
-    MongooseModule.forRoot(
-      'mongodb+srv://Nurvive:80afenon@cluster0.smakqvv.mongodb.net/?retryWrites=true&w=majority',
-    ),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        const userName = configService.get('USER_NAME');
+        const userPassword = configService.get('USER_PASSWORD');
+
+        return {
+          uri: `mongodb+srv://${userName}:${userPassword}@cluster0.smakqvv.mongodb.net/?retryWrites=true&w=majority`,
+        };
+      },
+    }),
     TrackModule,
     PlaylistModule,
     FileModule,

@@ -47,7 +47,7 @@ export class AuthController {
   async login(@Req() request: UserReq, @Res() response: Response) {
     const user = request.user;
 
-    const token = await this.authService.generateJwtToken(user);
+    const token = this.authService.generateJwtToken(user);
     response.cookie('auth', token, {
       maxAge: 12000000,
       httpOnly: true,
@@ -58,9 +58,20 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Post('logout')
+  logout(@Res() response: Response) {
+    response.cookie('auth', '', {
+      maxAge: 0,
+      httpOnly: true,
+      path: '/',
+    });
+
+    return response.sendStatus(200);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get()
   getProfile(@Req() request: UserReq) {
-    console.log(request, '!!!request!!!');
     const user = request.user;
     user.password = undefined;
 
